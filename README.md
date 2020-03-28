@@ -1,5 +1,6 @@
 # TechX 2020 计算社会科学暑期课程
 
+test
 
 ![torch](/assets/torch.gif)
 
@@ -56,3 +57,5 @@ Timnit Gebru, Jonathan Krause, Yilun Wang, Duyun Chen, Jia Deng, Erez Lieberman 
   - West. the fourth dimension
   - Liu, L., Wang, Y., Sinatra, R., Giles, C. L., Song, C., & Wang, D. (2018). Hot streaks in artistic, cultural, and scientific careers. Nature, 559(7714), 396.
 10. 第十天 选题讨论与课程结语
+
+![ask](/assets/ask.png)
