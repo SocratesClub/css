@@ -1,13 +1,15 @@
 # TechX 2020 计算社会科学暑期课程
 
 
-## Contributors: 
+## Contributors
 
 https://github.com/orgs/computational-class/teams/css_techx_camp
 
 
 
 ![torch](/assets/torch.gif)
+
+## Content
 
 | 序号         |    时间   |内容        | 参考文献   |
 | -------------|:-------------:|:-------------:|-----:|
@@ -28,45 +30,3 @@ https://github.com/orgs/computational-class/teams/css_techx_camp
 
 [Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
 
-## Readings
-
-1. 第一天 计算社会科学简介
-- Lazer 2009
-- Watts 2007
-- Watts common sense
-- Watts prediction
-2. 第二天 在线实验与因果推断
-- Salganik Musiclab
-- Facebook Election
-3. 第三天 多主体模型
-- tba
-4. 第四天 大数据
-- false news
-- Wu 2019 Disruption
-- american dream
-5. 第五天 机器学习简介
-- Google Flu
-- 手机预测贫困
-- future employment
-6. 休息
-7. 第七天 神经网络
-- Using deep learning and Google Street View to estimate the demographic makeup of neighborhoods across the United States Timnit Gebru, Jonathan Krause, Yilun Wang, Duyun Chen, Jia Deng, Erez Lieberman Aiden, Li Fei-Fei PNAS 2017
-- AlphaGo
-8. 第八天 词向量嵌入模型
-- Mikolov et al. (2013). Efficient Estimation of Word Representations in Vector Space
-- Mikolov et al. (2013). Distributed representations of words and phrases and their compositionality
-- Word embeddings quantify 100 years of gender and ethnic stereotypes. PNAS
-- Austin C. Kozlowski; Matt Taddy; James A. Evans The Geometry of Culture Analyzing Meaning through Word Embeddings
-- network embeddings
-- deep walk
-9. 第九天 自然语言处理初步
-- Google Book
-- tba sentiment analysis
-- topic models
-10. 第十天 网络科学、统计物理学和复杂性科学
-- small world
-- BA model
-- cultural diffusion
-- West. Scale
-- West. the fourth dimension
-- Liu, L., Wang, Y., Sinatra, R., Giles, C. L., Song, C., & Wang, D. (2018). Hot streaks in artistic, cultural, and scientific careers. Nature, 559(7714), 396.
