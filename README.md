@@ -1,6 +1,12 @@
 # TechX 2020 计算社会科学暑期课程
 
 
+## Contributors: 
+
+https://github.com/orgs/computational-class/teams/css_techx_camp
+
+
+
 ![torch](/assets/torch.gif)
 
 | 序号         |    时间   |内容        | 参考文献   |
