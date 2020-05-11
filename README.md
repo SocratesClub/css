@@ -11,6 +11,7 @@ https://github.com/orgs/computational-class/teams/css_techx_camp
 
 ## Content
 
+
 | **序号**   | **时间**   | **内容**   |
 |:----:|:----:|:----:|:----:|:----:|:----:|
 | 1   | 8.6   | 计算社会科学简介   |
@@ -30,4 +31,3 @@ https://github.com/orgs/computational-class/teams/css_techx_camp
 ![ask](/assets/time.png)
 
 [Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
-
