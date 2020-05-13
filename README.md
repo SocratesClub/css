@@ -1,9 +1,9 @@
 # TechX 2020 计算社会科学暑期课程
 
 
-## Contributors
+## CSS Team
 
-https://github.com/orgs/computational-class/teams/css_techx_camp
+https://github.com/orgs/computational-class/teams/css-team
 
 
 
