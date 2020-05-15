@@ -28,6 +28,8 @@ https://github.com/orgs/computational-class/teams/css-team
 
 [石墨文档](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
 
+Join in our wikisurvey http://www.allourideas.org/css 
+
 ![ask](/assets/time.png)
 
 [Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
