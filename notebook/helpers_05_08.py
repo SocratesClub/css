@@ -1,4 +1,3 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier
@@ -11,7 +10,8 @@ def visualize_tree(estimator, X, y, boundaries=True,
     
     # Plot the training points
     ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap='viridis',
-               clim=(y.min(), y.max()), zorder=3)
+               #clim=(y.min(), y.max()), 
+               zorder=3)
     ax.axis('tight')
     ax.axis('off')
     if xlim is None:
@@ -30,7 +30,7 @@ def visualize_tree(estimator, X, y, boundaries=True,
     Z = Z.reshape(xx.shape)
     contours = ax.contourf(xx, yy, Z, alpha=0.3,
                            levels=np.arange(n_classes + 1) - 0.5,
-                           cmap='viridis', clim=(y.min(), y.max()),
+                           cmap='viridis', #clim=(y.min(), y.max()),
                            zorder=1)
 
     ax.set(xlim=xlim, ylim=ylim)
@@ -63,7 +63,7 @@ def plot_tree_interactive(X, y):
         clf = DecisionTreeClassifier(max_depth=depth, random_state=0)
         visualize_tree(clf, X, y)
 
-    return interact(interactive_tree, depth=[1, 5])
+    return interact(interactive_tree, depth=(1, 5, 1))
 
 
 def randomized_tree_interactive(X, y):
@@ -80,4 +80,14 @@ def randomized_tree_interactive(X, y):
         visualize_tree(clf, X[i[:N]], y[i[:N]], boundaries=False,
                        xlim=xlim, ylim=ylim)
     
-    interact(fit_randomized_tree, random_state=[0, 100]);
+    interact(fit_randomized_tree, random_state=(0, 100));
+
+# +
+# from sklearn.datasets import make_blobs
+
+# X, y = make_blobs(n_samples=300, centers=4,
+#                   random_state=0, cluster_std=1.0)
+# plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='rainbow');
+
+# +
+# plot_tree_interactive(X, y);
