@@ -28,7 +28,7 @@ https://github.com/orgs/computational-class/teams/css-team
 <!-- #region -->
 [石墨文档](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
 
-![nbviewer](https://nbviewer.jupyter.org/static/img/nav_logo.svg)
+![nbviewer](/assets/nav_logo.svg)
 
 [Jupyter nbviewer](https://nbviewer.jupyter.org/github/computational-class/css/tree/master/notebook/)
 
