@@ -30,8 +30,6 @@ https://github.com/orgs/computational-class/teams/css-team
 
 ![nbviewer](https://nbviewer.jupyter.org/static/img/nav_logo.svg)
 
-<div><img src='/assets/nv_log.svg' width='200px' ><div>
-
 [Jupyter nbviewer](https://nbviewer.jupyter.org/github/computational-class/css/tree/master/notebook/)
 
 
