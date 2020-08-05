@@ -25,8 +25,13 @@ https://github.com/orgs/computational-class/teams/css-team
 | 9   | 8.15   | 词向量嵌入模型   |
 
 
-
+<!-- #region -->
 [石墨文档](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
+
+![nbviewer](https://nbviewer.jupyter.org/static/img/nav_logo.svg)
+
+https://nbviewer.jupyter.org/github/computational-class/css/tree/master/notebook/
+
 
 ## Wikisurvey
 
@@ -35,3 +40,4 @@ Join in our wikisurvey http://www.allourideas.org/css
 ![ask](/assets/time.png)
 
 [Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
+<!-- #endregion -->
