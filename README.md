@@ -41,7 +41,7 @@ https://github.com/orgs/computational-class/teams/css-team
 
 Join in our wikisurvey http://www.allourideas.org/css
 
-![ask](/assets/time.png)
+![ask](/assets/time1.png)
 
 [Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
 <!-- #endregion -->
