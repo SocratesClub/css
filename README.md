@@ -1,5 +1,6 @@
 # TechX 2020 计算社会科学暑期课程
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/computational-class/css/blob/master/notebook/01.intro2css.ipynb)
 
 ## CSS Team
 
