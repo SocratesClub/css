@@ -39,7 +39,7 @@ https://github.com/orgs/computational-class/teams/css-team
 
 [Jupyter nbviewer](https://nbviewer.jupyter.org/github/computational-class/css/tree/master/notebook/)
 
-![nbviewer](/assets/nav_logo.svg)
+<div><img src=/assets/nav_logo.svg width = 200px></div>
 
 ## Wikisurvey
 
