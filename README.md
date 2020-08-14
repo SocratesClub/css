@@ -30,6 +30,9 @@ https://github.com/orgs/computational-class/teams/css-team
 | 8月15日 | 第十天 自然语言处理初步  | 3小时 |
 
 <!-- #region -->
+
+## Readings & Homework
+
 [Readings & Homework](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
 
 ![nbviewer](/assets/nav_logo.svg)
