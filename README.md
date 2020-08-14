@@ -35,10 +35,11 @@ https://github.com/orgs/computational-class/teams/css-team
 
 [Readings & Homework](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
 
-![nbviewer](/assets/nav_logo.svg)
+## Slides
 
 [Jupyter nbviewer](https://nbviewer.jupyter.org/github/computational-class/css/tree/master/notebook/)
 
+![nbviewer](/assets/nav_logo.svg)
 
 ## Wikisurvey
 
