@@ -30,12 +30,16 @@ https://github.com/orgs/computational-class/teams/css-team
 | 8月15日 | 第十天 自然语言处理初步  | 3小时 |
 
 <!-- #region -->
-[石墨文档](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
 
-![nbviewer](/assets/nav_logo.svg)
+## Readings & Homework
+
+[Readings & Homework](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
+
+## Slides
 
 [Jupyter nbviewer](https://nbviewer.jupyter.org/github/computational-class/css/tree/master/notebook/)
 
+<div><img src=/assets/nav_logo.svg width = 200px></div>
 
 ## Wikisurvey
 
