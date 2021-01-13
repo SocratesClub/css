@@ -7,7 +7,7 @@
 
 ## CSS Team
 
-https://github.com/orgs/computational-class/teams/css-team
+https://github.com/orgs/SocratesAcademy/teams/css-team
 
 
 
