@@ -1,6 +1,6 @@
 # TechX 2020 计算社会科学暑期课程
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/computational-class/css/blob/master/notebook/01.content.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SocratesAcademy/css/blob/master/notebook/01.content.ipynb)
 
 ![](./assets/chengjun.png)
 
@@ -38,7 +38,9 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 ## Slides
 
-[Jupyter nbviewer](https://nbviewer.jupyter.org/github/computational-class/css/tree/master/notebook/)
+https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01.intro2css.ipynb#/
+
+[Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
 
 <div><img src=/assets/nav_logo.svg width = 200px></div>
 
