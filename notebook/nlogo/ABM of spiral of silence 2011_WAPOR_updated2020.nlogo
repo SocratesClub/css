@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                      
+;;
 ;;                     Agent-based modeling of silence spiral theory
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -11,110 +11,131 @@
 ;; Plus, use the behaviorSpace to to perform experiments with models.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-turtles-own 
-  [
-  flockmates     ;; agentset of nearby turtles
-  willingness-to-express
-  ]    
-               
-patches-own 
-  [
-  patchmates     ;; patchset of nearby patches
-  media
-  ]   
-
+;; step 1. define globals
 globals
 [marginal-change
- silent-people  ; The number of people kept silenct(i.e. being coloured red). 
+ silent-people  ;; The number of people kept silenct(i.e. being coloured red).
 ]
 
 
 
+;; step 2. define tutles-own
+turtles-own
+  [
+  flockmates     ;; agentset of nearby turtles
+  willingness-to-express
+  ]
+
+
+;; step 3. define patches-own
+patches-own
+  [
+  patchmates     ;; patchset of nearby patches
+  media
+  ]
+
+
+
+;; step 4. initialization
 to setup
-   clear-all
-   crt population 
+   ;; (for this model to work with NetLogo's new plotting features,
+  ;; __clear-all-and-reset-ticks should be replaced with clear-all at
+  ;; the beginning of your setup procedure and reset-ticks at the end
+  ;; of the procedure.)
+  clear-all
+   crt population
    [
     set color green
-    setxy random-xcor random-ycor  
+    setxy random-xcor random-ycor
     set shape "person student"
     set size 1.2
-   ]  
-   
+   ]
+
    ask patches ;;
-   [ set pcolor random-float 1.5 
-   set media (random 5 ) * media-amplifier  ;; Control media-amplifier to make faciliate the operation.
-   ]   
-   ask turtles   ;;to setup-turtles 
+   [ set pcolor random-float 1.5
+     set media (random -5 ) * media-amplifier  ;; Control media-amplifier to make faciliate the operation.
+   ]
+   ask turtles   ;;to setup-turtles
    [
     set willingness-to-express random-normal 0  1  ;;make it a random distribution
    ]
 end
 
+;; step 5. define updating rules
+
 to find-flockmates  ;; turtle procedure
-  set flockmates other turtles in-radius vision 
+  set flockmates other turtles in-radius vision
 end
 
-to go
- ask turtles [ surveillance ]                             
-  tick
-  show count turtles with [willingness-to-express >= 0]
-  set  silent-people count turtles with [willingness-to-express >= 0]
-  ask turtles [ recolor ]
-  ask turtles [stop]
-   if (silent-people = population) 
-    [  stop ]
-   if (silent-people = 0) 
-    [  stop ]
-  do-plots
-end
 
 to surveillance  ;; turtle procedure
-  find-flockmates  
-  if any? flockmates                                              
-    [   
-        let moa  sum [media]  of patch-set [neighbors4] of  patch-here 
+  find-flockmates
+  if any? flockmates
+    [
+        let mass-media  sum [media]  of patch-set [neighbors4] of  patch-here
         let reference-group   sum [willingness-to-express] of flockmates
-        set marginal-change  alpha-media * moa + beta-reference-group * reference-group
-  set willingness-to-express   willingness-to-express + marginal-change]
+        set marginal-change  alpha-media * mass-media + beta-reference-group * reference-group
+        set willingness-to-express   willingness-to-express + marginal-change]
 end
 
 to recolor  ;; turtle procedure
   ifelse willingness-to-express >= 0
-    [ (set color red )  ( set shape "person" )]  ;; set the silent people's shape as "Person"
-    [ set color green ]
-    
+    [ set color green ] ;; if >=0, talk
+    [ set color red
+      set shape "person" ]  ;; esle, falling silent
 end
 
 
 to do-plots
-set-current-plot "Spiral of silence"
+set-current-plot "Spiral of Silence"
 set-current-plot-pen "silent people"
 plot count turtles with [color = red]
 set-current-plot-pen "talking people"
 plot count turtles with [color = green]
 
 set-current-plot "Marginal Change"
-;;plot-pen-reset  
+;;plot-pen-reset
 set-current-plot-pen "marginal-change"
 plot marginal-change * 10000
 end
 
 
+;; step 6. iterations
+
+to go
+ ask turtles [ surveillance ]
+  reset-ticks
+  show count turtles with [willingness-to-express >= 0]
+  set  silent-people count turtles with [willingness-to-express < 0]
+  ask turtles [ recolor ]
+  ask turtles [stop]
+   if (silent-people = population)
+    [  stop ]
+   if (silent-people = 0)
+    [  stop ]
+  do-plots
+end
+
+
+
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; Aug 20,23:20, 2010,Chengjun WANG @ home, finished the first edition of this ABM of spiral of silence
-;; Revised at Sep 30, 14:23, 2011, Chengjun WANG @ Office. 
+;; Revised at Sep 30, 14:23, 2011, Chengjun WANG @ Office.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 451
 22
-968
-534
-19
-18
+966
+512
+-1
+-1
 13.0
 1
 10
@@ -133,6 +154,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 274
@@ -149,6 +171,7 @@ NIL
 NIL
 NIL
 NIL
+1
 
 BUTTON
 392
@@ -165,6 +188,7 @@ NIL
 NIL
 NIL
 NIL
+1
 
 MONITOR
 276
@@ -186,7 +210,7 @@ vision
 vision
 0
 10
-2
+2.0
 1
 1
 patches
@@ -201,7 +225,7 @@ population
 population
 0
 2000
-2000
+2000.0
 1
 1
 persons
@@ -212,7 +236,7 @@ PLOT
 203
 442
 396
-Spiral of silence
+Spiral of Silence
 time
 Number
 0.0
@@ -221,9 +245,10 @@ Number
 300.0
 true
 true
+"" ""
 PENS
-"silent people" 1.0 0 -2674135 true
-"talking people" 1.0 0 -10899396 true
+"silent people" 1.0 0 -2674135 true "" ""
+"talking people" 1.0 0 -10899396 true "" ""
 
 SLIDER
 56
@@ -234,7 +259,7 @@ alpha-media
 alpha-media
 0
 0.01
-0.0020
+0.001
 0.0001
 1
 NIL
@@ -249,7 +274,7 @@ media-amplifier
 media-amplifier
 1
 100
-1
+10.0
 1
 1
 NIL
@@ -264,7 +289,7 @@ beta-reference-group
 beta-reference-group
 0
 0.01
-1.0E-4
+0.001
 0.001
 1
 NIL
@@ -285,6 +310,7 @@ NIL
 NIL
 NIL
 NIL
+1
 
 PLOT
 62
@@ -300,48 +326,44 @@ marginal-change
 10.0
 true
 false
+"" ""
 PENS
-"marginal-change" 1.0 0 -13345367 true
+"marginal-change" 1.0 0 -13345367 true "" ""
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This model is created by WANG Chengjun,who focused on the simulation of the spiral of silence theory which is very extensive grand theory.
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Von-Neumann assumed that everyone will be influenced by the media and his social network,everyone who thought their opinion is not a dominate one will fear of being
 isolated by the society,so they keep silent,on the contrary,the people who think they are holding the dominate ideas will tend to speak out.
 
 So everyone will be influenced by other people,and this causes the emergence of spiral silence.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 You can moderate the coefficients,control three of their values zero,and oberserve the influence of the forth coefficient on the public opinion.
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 When you keep the other three coefficients zero(bmedia-opinion-atmosphere, bsocial-isolation-sense ,bexpression-tendency ),but keep the bpersonal-opinion-property equals 0.001,then you can find a neck-to-neck dead lock rather than spiral of silence.
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
 Try to moderate the vison,which controls how many neighbours everyone will monitor to get an idea of the dominate opinion.
 
-EXTENDING THE MODEL
--------------------
+## EXTENDING THE MODEL
+
 Netologo restrict the turtles' neibours numbers,but the real network in our daily life is power law,so maybe I will do some mederation latter.
 
-NETLOGO FEATURES
-----------------
+## NETLOGO FEATURES
+
 I think the automatic halt and reminding is cool.
 
+## CREDITS AND REFERENCES
 
-CREDITS AND REFERENCES
-----------------------
 This model is created by WANG Chengjun,who focused on the simulation of the spiral of silence theory which is very extensive grand theory.
 Having anything confued on this model,free free to contact me:
 wangchj04@gmail.com
@@ -354,7 +376,6 @@ Room 105D,Hall 8, City university of Hong kong,
 Email: wangchj04@gmail.com;
 UniversityEmail: chengwang6@student.cityu.edu.hk
 Mobile:96442905   Tel:34423580
-
 @#$#@#$#@
 default
 true
@@ -679,37 +700,11 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 4.1.3
-@#$#@#$#@
+NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
-<experiments>
-  <experiment name="RQ5P2000" repetitions="100" runMetricsEveryStep="true">
-    <setup>setup</setup>
-    <go>go</go>
-    <exitCondition>( (count turtles with [color = green] ) &lt; 2000 )
-  and ( (count turtles with [color = green]) &gt;= 1960) 
- or ( (count turtles with [color = red] ) &gt;= 1960 )</exitCondition>
-    <metric>count turtles with [color = red]</metric>
-    <enumeratedValueSet variable="alpha-media">
-      <value value="0.0020"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="population">
-      <value value="2000"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="vision">
-      <value value="2"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="beta-reference-group">
-      <value value="1.0E-4"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="media-amplifier">
-      <value value="1"/>
-    </enumeratedValueSet>
-  </experiment>
-</experiments>
+@#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
 default
@@ -722,7 +717,6 @@ true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 0
 @#$#@#$#@
