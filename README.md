@@ -48,7 +48,7 @@ https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/maste
 
 Join in our wikisurvey http://www.allourideas.org/css
 
-![ask](/assets/time1.png)
+![ask](2021.jpg)
 
 [Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
 <!-- #endregion -->
