@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://jalammar.github.io/illustrated-word2vec/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time.</title>
+
+        
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    
+    <meta name="description" content=" Discussions:
+Hacker News (347 points, 37 comments), Reddit r/MachineLearning (151 points, 19 comments)
+
+
+
+Translations: Chinese (Simplified), Korean, Portuguese, Russian
+
+
+
+  
+  
+
+
+
+  “There is in all things a pattern that is part of our universe. It has symmetry, elegance, and grace - those qualities you find always in that which the true artist captures. You can find it in the turning of the seasons, in the way sand trails along a ridge, in the branch clusters of the creosote
+  bush or the pattern of its leaves. 
+
+  We try to copy these patterns in our lives and our society,
+  seeking the rhythms, the dances, the forms that comfort.
+  Yet, it is possible to see peril in the finding of
+  ultimate perfection. It is clear that the ultimate
+  pattern contains it own fixity. In such
+  perfection, all things move toward death.”
+  ~ Dune (1965)
+
+
+I find the concept of embeddings to be one of the most fascinating ideas in machine learning. If you’ve ever used Siri, Google Assistant, Alexa, Google Translate, or even smartphone keyboard with next-word prediction, then chances are you’ve benefitted from this idea that has become central to Natural Language Processing models. There has been quite a development over the last couple of decades in using embeddings for neural models (Recent developments include contextualized word embeddings leading to cutting-edge models like BERT and GPT2).
+
+Word2vec is a method to efficiently create word embeddings and has been around since 2013. But in addition to its utility as a word-embedding method, some of its concepts have been shown to be effective in creating recommendation engines and making sense of sequential data even in commercial, non-language tasks. Companies like Airbnb, Alibaba, Spotify, and Anghami have all benefitted from carving out this brilliant piece of machinery from the world of NLP and using it in production to empower a new breed of recommendation engines.
+
+In this post, we’ll go over the concept of embedding, and the mechanics of generating embeddings with word2vec. But let’s start with an example to get familiar with using vectors to represent things. Did you know that a list of five numbers (a vector) can represent so much about your personality?
+
+">
+    <meta property="og:description" content=" Discussions:
+Hacker News (347 points, 37 comments), Reddit r/MachineLearning (151 points, 19 comments)
+
+
+
+Translations: Chinese (Simplified), Korean, Portuguese, Russian
+
+
+
+  
+  
+
+
+
+  “There is in all things a pattern that is part of our universe. It has symmetry, elegance, and grace - those qualities you find always in that which the true artist captures. You can find it in the turning of the seasons, in the way sand trails along a ridge, in the branch clusters of the creosote
+  bush or the pattern of its leaves. 
+
+  We try to copy these patterns in our lives and our society,
+  seeking the rhythms, the dances, the forms that comfort.
+  Yet, it is possible to see peril in the finding of
+  ultimate perfection. It is clear that the ultimate
+  pattern contains it own fixity. In such
+  perfection, all things move toward death.”
+  ~ Dune (1965)
+
+
+I find the concept of embeddings to be one of the most fascinating ideas in machine learning. If you’ve ever used Siri, Google Assistant, Alexa, Google Translate, or even smartphone keyboard with next-word prediction, then chances are you’ve benefitted from this idea that has become central to Natural Language Processing models. There has been quite a development over the last couple of decades in using embeddings for neural models (Recent developments include contextualized word embeddings leading to cutting-edge models like BERT and GPT2).
+
+Word2vec is a method to efficiently create word embeddings and has been around since 2013. But in addition to its utility as a word-embedding method, some of its concepts have been shown to be effective in creating recommendation engines and making sense of sequential data even in commercial, non-language tasks. Companies like Airbnb, Alibaba, Spotify, and Anghami have all benefitted from carving out this brilliant piece of machinery from the world of NLP and using it in production to empower a new breed of recommendation engines.
+
+In this post, we’ll go over the concept of embedding, and the mechanics of generating embeddings with word2vec. But let’s start with an example to get familiar with using vectors to represent things. Did you know that a list of five numbers (a vector) can represent so much about your personality?
+
+">
+    
+    <meta name="author" content="Jay Alammar">
+
+    
+    <meta property="og:title" content="The Illustrated Word2vec">
+    <meta property="twitter:title" content="The Illustrated Word2vec">
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script async="" src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/analytics.js"></script><script src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/jquery-3.1.1.slim.min.js"></script>
+    <script type="text/javascript" src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/d3.min.js"></script>
+    <script type="text/javascript" src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/d3-selection-multi.v0.4.min.js"></script>
+    <script type="text/javascript" src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/d3-jetpack.js"></script>
+
+    <link rel="stylesheet" href="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/bootstrap.min.css">
+    <link rel="stylesheet" href="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/bootstrap-theme.min.css">
+    <script src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/bootstrap.min.js"> </script>
+
+    <link rel="stylesheet" type="text/css" href="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/gifplayer.css">
+    <script type="text/javascript" src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/jquery.gifplayer.js"></script>
+
+    <!--
+    <script data-main="scripts/main" src="scripts/require.js"></script>
+    -->
+    <link rel="stylesheet" href="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/katex.min.css" integrity="sha384-wE+lCONuEo/QSfLb4AfrSk7HjWJtc4Xc1OiB2/aDBzHzjnlBP4SX7vjErTcwlA8C" crossorigin="anonymous">
+    <script src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/katex.min.js" integrity="sha384-tdtuPw3yx/rnUGmnLNWXtfjb9fpmwexsd+lr6HUYnUY4B7JhB5Ty7a1mYd+kto/s" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jay Alammar - Visualizing machine learning one concept at a time." href="https://jalammar.github.io/feed.xml">
+
+    <meta name="viewport" content="width=device-width">
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+
+    <!-- Piwik -->
+    <!-- Piwik
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(["setDomains", ["*.example.org"]]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u="https://a.jalammar.com/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', '1']);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript><p><img src="https://a.jalammar.com/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>-->
+    <!-- End Piwik Code -->
+
+    <!-- End Piwik Code -->
+  <style type="text/css">#mc_embed_signup input.mce_inline_error { border-color:#6B0505; } #mc_embed_signup div.mce_inline_error { margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff; }</style></head>
+
+  <body data-new-gr-c-s-check-loaded="14.1024.0" data-gr-ext-installed="" style="zoom: 1;">
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="https://jalammar.github.io/" class="site-avatar"><img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/1007956"></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="https://jalammar.github.io/">Jay Alammar</a></h1>
+            <p class="site-description">Visualizing machine learning one concept at a time.<br><a href="https://twitter.com/JayAlammar">@JayAlammar</a> on Twitter. <a href="https://www.youtube.com/channel/UCmOwsoHty5PrmE-3QhUBfPQ">YouTube Channel</a></p>
+          </div>
+
+          <nav>
+            <a href="https://jalammar.github.io/">Blog</a>
+            <a href="https://jalammar.github.io/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>The Illustrated Word2vec</h1>
+
+  <div class="entry prediction">
+    <p><span class="discussion"> Discussions:
+<a href="https://news.ycombinator.com/item?id=19498356" class="hn-link">Hacker News (347 points, 37 comments)</a>, <a href="https://www.reddit.com/r/MachineLearning/comments/b60jtg/p_the_illustrated_word2vec/" class="">Reddit r/MachineLearning (151 points, 19 comments)</a>
+</span>
+<br>
+<span class="discussion">
+Translations: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MTQzNzU2NA==&amp;mid=2651669277&amp;idx=2&amp;sn=bc8f0590f9e340c1f1359982726c5a30&amp;chksm=bd4c648e8a3bed9817f30c5a512e79fe0cc6fbc58544f97c857c30b120e76508fef37cae49bc&amp;scene=0&amp;xtrack=1#rd">Chinese (Simplified)</a>, <a href="https://databreak.netlify.com/2019-04-25-illustrated_word2vec/">Korean</a>, <a href="https://pessoalex.wordpress.com/2019/03/29/o-word2vec-ilustrado/">Portuguese</a>, <a href="https://habr.com/ru/post/446530/">Russian</a>
+</span></p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec.png">
+  <br>
+</div>
+
+<blockquote class="subtle">
+  “<strong>There is in all things a pattern that is part of our universe. It has symmetry, elegance, and grace</strong> - those qualities you find always in that which the true artist captures. You can find it in the turning of the seasons, in the way sand trails along a ridge, in the branch clusters of the creosote
+  bush or the pattern of its leaves. <br><br>
+
+  We try to copy these patterns in our lives and our society,
+  seeking the rhythms, the dances, the forms that comfort.
+  Yet, it is possible to see peril in the finding of
+  ultimate perfection. It is clear that the ultimate
+  pattern contains it own fixity. In such
+  perfection, all things move toward death.”
+  ~ Dune (1965)
+</blockquote>
+
+<p>I find the concept of embeddings to be one of the most fascinating ideas in machine learning. If you’ve ever used Siri, Google Assistant, Alexa, Google Translate, or even smartphone keyboard with next-word prediction, then chances are you’ve benefitted from this idea that has become central to Natural Language Processing models. There has been quite a development over the last couple of decades in using embeddings for neural models (Recent developments include contextualized word embeddings leading to cutting-edge models like <a href="https://jalammar.github.io/illustrated-bert/">BERT</a> and GPT2).</p>
+
+<p>Word2vec is a method to efficiently create word embeddings and has been around since 2013. But in addition to its utility as a word-embedding method, some of its concepts have been shown to be effective in creating recommendation engines and making sense of sequential data even in commercial, non-language tasks. Companies like <a href="https://www.kdd.org/kdd2018/accepted-papers/view/real-time-personalization-using-embeddings-for-search-ranking-at-airbnb">Airbnb</a>, <a href="https://www.kdd.org/kdd2018/accepted-papers/view/billion-scale-commodity-embedding-for-e-commerce-recommendation-in-alibaba">Alibaba</a>, <a href="https://www.slideshare.net/AndySloane/machine-learning-spotify-madison-big-data-meetup">Spotify</a>, and <a href="https://towardsdatascience.com/using-word2vec-for-music-recommendations-bb9649ac2484">Anghami</a> have all benefitted from carving out this brilliant piece of machinery from the world of NLP and using it in production to empower a new breed of recommendation engines.</p>
+
+<p>In this post, we’ll go over the concept of embedding, and the mechanics of generating embeddings with word2vec. But let’s start with an example to get familiar with using vectors to represent things. Did you know that a list of five numbers (a vector) can represent so much about your personality?</p>
+
+<!--more-->
+
+<h1 id="personality-embeddings-what-are-you-like">Personality Embeddings: What are you like?</h1>
+<blockquote class="subtle">
+“I give you the desert chameleon, whose ability to blend itself into the background tells you all you need to know about the roots of ecology and the foundations of a personal identity” ~Children of Dune
+</blockquote>
+
+<p>On a scale of 0 to 100, how introverted/extraverted are you (where 0 is the most introverted, and 100 is the most extraverted)?
+Have you ever taken a personality test like MBTI – or even better, the <a href="https://en.wikipedia.org/wiki/Big_Five_personality_traits">Big Five Personality Traits</a> test? If you haven’t, these are tests that ask you a list of questions, then score you on a number of axes, introversion/extraversion being one of them.</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/big-five-personality-traits-score.png">
+  <br>
+  Example of the result of a Big Five Personality Trait test. It can really tell you a lot about yourself and is shown to have predictive ability in <a href="http://psychology.okstate.edu/faculty/jgrice/psyc4333/FiveFactor_GPAPaper.pdf">academic</a>, <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1744-6570.1999.tb00174.x">personal</a>, and <a href="https://www.massgeneral.org/psychiatry/assets/published_papers/soldz-1999.pdf">professional success</a>. <a href="https://projects.fivethirtyeight.com/personality-quiz/">This</a> is one place to find your results.
+</div>
+
+<p>Imagine I’ve scored 38/100 as my introversion/extraversion score. we can plot that in this way:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/introversion-extraversion-100.png">
+</div>
+
+<p>Let’s switch the range to be from -1 to 1:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/introversion-extraversion-1.png">
+</div>
+
+<p>How well do you feel you know a person knowing only this one piece of information about them? Not much. People are complex. So let’s add another dimension – the score of one other trait from the test.</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/two-traits-vector.png">
+  <br>
+  We can represent the two dimensions as a point on the graph, or better yet, as a vector from the origin to that point. We have incredible tools to deal with vectors that will come in handy very shortly.
+</div>
+
+<p>I’ve hidden which traits we’re plotting just so you get used to not knowing what each dimension represents – but still getting a lot of value from the vector representation of a person’s personality.</p>
+
+<p>We can now say that this vector partially represents my personality. The usefulness of such representation comes when you want to compare two other people to me. Say I get hit by a <code class="language-plaintext highlighter-rouge">bus</code> and I need to be replaced by someone with a similar personality. In the following figure, which of the two people is more similar to me?</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/personality-two-persons.png">
+</div>
+
+<p>When dealing with vectors, a common way to calculate a similarity score is <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine_similarity</a>:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/cosine-similarity.png">
+  <br>
+  <span class="encoder">Person #1</span> is more similar to me in personality. Vectors pointing at the same direction (length plays a role as well) have a higher cosine similarity score.
+</div>
+
+<p>Yet again, two dimensions aren’t enough to capture enough information about how different people are. Decades of psychology research have led to five major traits (and plenty of sub-traits). So let’s use all five dimensions in our comparison:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/big-five-vectors.png">
+  <br>
+</div>
+
+<p>The problem with five dimensions is that we lose the ability to draw neat little arrows in two dimensions. This is a common challenge in machine learning where we often have to think in higher-dimensional space. The good thing is, though, that cosine_similarity still works. It works with any number of dimensions:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/embeddings-cosine-personality.png">
+  <br>
+  cosine_similarity works for any number of dimensions. These are much better scores because they're calculated based on a higher resolution representation of the things being compared.
+</div>
+
+<p>At the end of this section, I want us to come out with two central ideas:</p>
+
+<ol>
+  <li>We can represent people (and things) as vectors of numbers (which is great for machines!).</li>
+  <li>We can easily calculate how similar vectors are to each other.</li>
+</ol>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/section-1-takeaway-vectors-cosine.png">
+  <br>
+</div>
+
+<h1 id="word-embeddings">Word Embeddings</h1>
+
+<blockquote class="subtle">
+“The gift of words is the gift of deception and illusion” ~Children of Dune
+</blockquote>
+
+<p>With this understanding, we can proceed to look at trained word-vector examples (also called word embeddings) and start looking at some of their interesting properties.</p>
+
+<p>This is a word embedding for the word “king” (GloVe vector trained on Wikipedia):</p>
+
+<p><code class="small_code">
+[ 0.50451 ,  0.68607 , -0.59517 , -0.022801,  0.60046 , -0.13498 ,
+ -0.08813 ,  0.47377 , -0.61798 , -0.31012 , -0.076666,  1.493   ,
+ -0.034189, -0.98173 ,  0.68229 ,  0.81722 , -0.51874 , -0.31503 ,
+ -0.55809 ,  0.66421 ,  0.1961  , -0.13495 , -0.11476 , -0.30344 ,
+  0.41177 , -2.223   , -1.0756  , -1.0783  , -0.34354 ,  0.33505 ,
+  1.9927  , -0.04234 , -0.64319 ,  0.71125 ,  0.49159 ,  0.16754 ,
+  0.34344 , -0.25663 , -0.8523  ,  0.1661  ,  0.40102 ,  1.1685  ,
+ -1.0137  , -0.21585 , -0.15155 ,  0.78321 , -0.91241 , -1.6106  ,
+ -0.64426 , -0.51042 ]
+ </code></p>
+
+<p>It’s a list of 50 numbers. We can’t tell much by looking at the values. But let’s visualize it a bit so we can compare it other word vectors. Let’s put all these numbers in one row:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/king-white-embedding.png">
+  <br>
+</div>
+
+<p>Let’s color code the cells based on their values (red if they’re close to 2, white if they’re close to 0, blue if they’re close to -2):</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/king-colored-embedding.png">
+  <br>
+</div>
+
+<p>We’ll proceed by ignoring the numbers and only looking at the colors to indicate the values of the cells. Let’s now contrast “King” against other words:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/king-man-woman-embedding.png">
+  <br>
+</div>
+
+<p>See how “Man” and “Woman” are much more similar to each other than either of them is to “king”? This tells you something. These vector representations capture quite a bit of the information/meaning/associations of these words.</p>
+
+<p>Here’s another list of examples (compare by vertically scanning the columns looking for columns with similar colors):</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/queen-woman-girl-embeddings.png">
+  <br>
+</div>
+
+<p>A few things to point out:</p>
+
+<ol>
+  <li>There’s a straight red column through all of these different words. They’re similar along that dimension (and we don’t know what each dimensions codes for)</li>
+  <li>You can see how “woman” and “girl” are similar to each other in a lot of places. The same with “man” and “boy”</li>
+  <li>“boy” and “girl” also have places where they are similar to each other, but different from “woman” or “man”. Could these be coding for a vague conception of youth? possible.</li>
+  <li>All but the last word are words representing people. I added an object (water) to show the differences between categories. You can, for example, see that blue column going all the way down and stopping before the embedding for “water”.</li>
+  <li>There are clear places where “king” and “queen” are similar to each other and distinct from all the others. Could these be coding for a vague concept of royalty?</li>
+</ol>
+
+<h2 id="analogies">Analogies</h2>
+
+<blockquote class="subtle">
+"Words can carry any burden we wish. All that's required is agreement and a tradition upon which to build." ~God Emperor of Dune
+</blockquote>
+
+<p>The famous examples that show an incredible property of embeddings is the concept of analogies. We can add and subtract word embeddings and arrive at interesting results. The most famous example is the formula: “king” - “man” + “woman”:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/king-man+woman-gensim.png">
+  <br>
+  Using the <a href="https://radimrehurek.com/gensim/">Gensim</a> library in python, we can add and subtract word vectors, and it would find the most similar words to the resulting vector. The image shows a list of the most similar words, each with its cosine similarity.
+</div>
+
+<p>We can visualize this analogy as we did previously:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/king-analogy-viz.png">
+  <br>
+  The resulting vector from "king-man+woman" doesn't exactly equal "queen", but "queen" is the closest word to it from the 400,000 word embeddings we have in this collection.
+</div>
+
+<p>Now that we’ve looked at trained word embeddings, let’s learn more about the training process. But before we get to word2vec, we need to look at a conceptual parent of word embeddings: the neural language model.</p>
+
+<h1 id="language-modeling">Language Modeling</h1>
+
+<blockquote class="subtle">
+  “The prophet is not diverted by illusions of past, present and future. <strong>The fixity of language determines such linear distinctions.</strong> Prophets hold a key to the lock in a language. <br> <br>
+
+  This is not a mechanical universe. The linear progression of events is imposed by the observer. Cause and effect? That's not it at all. <strong>The prophet utters fateful words.</strong> You glimpse a thing "destined to occur." But the prophetic instant releases something of infinite portent and power. The universe undergoes a ghostly shift.” ~God Emperor of Dune
+</blockquote>
+
+<p>If one wanted to give an example of an NLP application, one of the best examples would be the next-word prediction feature of a smartphone keyboard. It’s a feature that billions of people use hundreds of times every day.</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/swiftkey-keyboard.png">
+  <br>
+</div>
+
+<p>Next-word prediction is a task that can be addressed by a <em>language model</em>. A language model can take a list of words (let’s say two words), and attempt to predict the word that follows them.</p>
+
+<p>In the screenshot above, we can think of the model as one that took in these two green words (<code class="plain_code mdc-text-green-600">thou shalt</code>) and returned a list of suggestions (“not” being the one with the highest probability):</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/thou-shalt-_.png">
+  <br>
+</div>
+
+<p><br></p>
+
+<p>We can think of the model as looking like this black box:</p>
+
+<p><br></p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/language_model_blackbox.png">
+  <br>
+</div>
+
+<p><br></p>
+
+<p>But in practice, the model doesn’t output only one word. It actually outputs a probability score for all the words it knows (the model’s “vocabulary”, which can range from a few thousand to over a million words). The keyboard application then has to find the words with the highest scores, and present those to the user.</p>
+
+<p><br></p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/language_model_blackbox_output_vector.png">
+  <br>
+  The output of the neural language model is a probability score for all the words the model knows. We're referring to the probability as a percentage here, but 40% would actually be represented as 0.4 in the output vector.
+</div>
+
+<p><br></p>
+
+<p>After being trained, early neural language models (<a href="http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf">Bengio 2003</a>) would calculate a prediction in three steps:</p>
+
+<p><br></p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/neural-language-model-prediction.png">
+  <br>
+</div>
+
+<p><br></p>
+
+<p>The first step is the most relevant for us as we discuss embeddings. One of the results of the training process was this matrix that contains an embedding for each word in our vocabulary. During prediction time, we just look up the embeddings of the input word, and use them to calculate the prediction:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/neural-language-model-embedding.png">
+  <br>
+</div>
+
+<p>Let’s now turn to the training process to learn more about how this embedding matrix was developed.</p>
+
+<h1 id="language-model-training">Language Model Training</h1>
+
+<blockquote class="subtle">
+“A process cannot be understood by stopping it. Understanding must move with the flow of the process, must join it and flow with it.” ~Dune
+</blockquote>
+
+<p>Language models have a huge advantage over most other machine learning models. That advantage is that we are able to train them on running text – which we have an abundance of. Think of all the books, articles, Wikipedia content, and other forms of text data we have lying around. Contrast this with a lot of other machine learning models which need hand-crafted features and specially-collected data.</p>
+
+<blockquote>
+  <p>“You shall know a word by the company it keeps” J.R. Firth</p>
+</blockquote>
+
+<p>Words get their embeddings by us looking at which other words they tend to appear next to. The mechanics of that is that</p>
+
+<ol>
+  <li>We get a lot of text data (say, all Wikipedia articles, for example). then</li>
+  <li>We have a window (say, of three words) that we slide against all of that text.</li>
+  <li>The sliding window generates training samples for our model</li>
+</ol>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/wikipedia-sliding-window.png">
+  <br>
+</div>
+
+<p>As this window slides against the text, we (virtually) generate a dataset that we use to train a model. To look exactly at how that’s done, let’s see how the sliding window processes this phrase:</p>
+
+<blockquote>
+  <p>“Thou shalt not make a machine in the likeness of a human mind” ~Dune</p>
+</blockquote>
+
+<p>When we start, the window is on the first three words of the sentence:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/lm-sliding-window.png">
+  <br>
+</div>
+
+<p><br></p>
+
+<p>We take the first two words to be features, and the third word to be a label:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/lm-sliding-window-2.png">
+  <br>
+  We now have generated the first sample in the dataset we can later use to train a language model.
+</div>
+
+<p><br></p>
+
+<p>We then slide our window to the next position and create a second sample:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/lm-sliding-window-3.png">
+  <br>
+  An the second example is now generated.
+</div>
+
+<p><br></p>
+
+<p>And pretty soon we have a larger dataset of which words tend to appear after different pairs of words:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/lm-sliding-window-4.png">
+  <br>  
+</div>
+
+<p><br></p>
+
+<p>In practice, models tend to be trained while we’re sliding the window. But I find it clearer to logically separate the “dataset generation” phase from the training phase. Aside from neural-network-based approaches to language modeling, a technique called N-grams was commonly used to train language models (see: Chapter 3 of <a href="http://web.stanford.edu/~jurafsky/slp3/">Speech and Language Processing</a>). To see how this switch from N-grams to neural models reflects on real-world products, <a href="https://blog.swiftkey.com/neural-networks-a-meaningful-leap-for-mobile-typing/">here’s a 2015 blog post from Swiftkey</a>, my favorite Android keyboard, introducing their neural language model and comparing it with their previous N-gram model. I like this example because it shows you how the algorithmic properties of embeddings can be described in marketing speech.</p>
+
+<h2 id="look-both-ways">Look both ways</h2>
+
+<blockquote class="subtle">
+"Paradox is a pointer telling you to look beyond it. If paradoxes bother you, that betrays your deep desire for absolutes. The relativist treats a paradox merely as interesting, perhaps amusing or even, dreadful thought, educational." ~God Emperor of Dune
+</blockquote>
+
+<p>Knowing what you know from earlier in the post, fill in the blank:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/jay_was_hit_by_a_.png">
+  <br>  
+</div>
+
+<p>The context I gave you here is five words before the blank word (and an earlier mention of “bus”). I’m sure most people would guess the word <code class="language-plaintext highlighter-rouge">bus</code> goes into the blank. But what if I gave you one more piece of information – a word after the blank, would that change your answer?</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/jay_was_hit_by_a_bus.png">
+  <br>  
+</div>
+
+<p>This completely changes what should go in the blank. the word <code class="language-plaintext highlighter-rouge">red</code> is now the most likely to go into the blank. What we learn from this is the words both before and after a specific word carry informational value. It turns out that accounting for both directions (words to the left and to the right of the word we’re guessing) leads to better word embeddings. Let’s see how we can adjust the way we’re training the model to account for this.</p>
+
+<h1 id="skipgram">Skipgram</h1>
+
+<blockquote class="subtle">
+  “Intelligence takes chance with limited data in an arena where mistakes are not only possible but also necessary.” ~Chapterhouse: Dune
+</blockquote>
+
+<p>Instead of only looking two words before the target word, we can also look at two words after it.</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/continuous-bag-of-words-example.png">
+  <br>  
+</div>
+
+<p>If we do this, the dataset we’re virtually building and training the model against would look like this:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/continuous-bag-of-words-dataset.png">
+  <br>  
+</div>
+
+<p>This is called a <strong>Continuous Bag of Words</strong> architecture and is described in <a href="https://arxiv.org/pdf/1301.3781.pdf">one of the word2vec papers</a> [pdf]. Another architecture that also tended to show great results does things a little differently.</p>
+
+<p>Instead of guessing a word based on its context (the words before and after it), this other architecture tries to guess neighboring words using the current word. We can think of the window it slides against the training text as looking like this:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-sliding-window.png">
+  <br>  
+  The word in the green slot would be the input word, each pink box would be a possible output.
+</div>
+
+<p>The pink boxes are in different shades because this sliding window actually creates four separate samples in our training dataset:</p>
+
+<p><br></p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-sliding-window-samples.png">
+  <br>  
+</div>
+
+<p><br></p>
+
+<p>This method is called the <strong>skipgram</strong> architecture. We can visualize the sliding window as doing the following:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-sliding-window-1.png">
+  <br>  
+</div>
+
+<p><br></p>
+
+<p>This would add these four samples to our training dataset:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-sliding-window-2.png">
+  <br>  
+</div>
+
+<p>We then slide our window to the next position:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-sliding-window-3.png">
+  <br>  
+</div>
+<p><br></p>
+
+<p>Which generates our next four examples:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-sliding-window-4.png">
+  <br>  
+</div>
+
+<p>A couple of positions later, we have a lot more examples:</p>
+
+<p><br></p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-sliding-window-5.png">
+  <br>  
+</div>
+
+<h2 id="revisiting-the-training-process">Revisiting the training process</h2>
+
+<blockquote class="subtle">
+  "Muad'Dib learned rapidly because his first training was in how to learn. And the first lesson of all was the basic trust that he could learn. It's shocking to find how many people do not believe they can learn, and how many more believe learning to be difficult." ~Dune
+</blockquote>
+
+<p>Now that we have our skipgram training dataset that we extracted from existing running text, let’s glance at how we use it to train a basic neural language model that predicts the neighboring word.</p>
+
+<p><br></p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-language-model-training.png">
+  <br>  
+</div>
+
+<p>We start with the first sample in our dataset. We grab the feature and feed to the untrained model asking it to predict an appropriate neighboring word.</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-language-model-training-2.png">
+  <br>  
+</div>
+
+<p>The model conducts the three steps and outputs a prediction vector (with a probability assigned to each word in its vocabulary). Since the model is untrained, it’s prediction is sure to be wrong at this stage. But that’s okay. We know what word it should have guessed – the label/output cell in the row we’re currently using to train the model:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-language-model-training-3.png">
+  <br>  
+  The 'target vector' is one where the target word has the probability 1, and all other words have the probability 0.
+</div>
+
+<p><br></p>
+
+<p>How far off was the model? We subtract the two vectors resulting in an error vector:</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-language-model-training-4.png">
+  <br>  
+</div>
+
+<p><br></p>
+
+<p>This error vector can now be used to update the model so the next time, it’s a little more likely to guess <code class="plain_code mdc-text-pink-500">thou</code> when it gets <code class="plain_code mdc-text-green-500">not</code> as input.</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-language-model-training-5.png">
+  <br>  
+</div>
+
+<p><br></p>
+
+<p>And that concludes the first step of the training. We proceed to do the same process with the next sample in our dataset, and then the next, until we’ve covered all the samples in the dataset. That concludes one <em>epoch</em> of training. We do it over again for a number of epochs, and then we’d have our trained model and we can extract the embedding matrix from it and use it for any other application.</p>
+
+<p>While this extends our understanding of the process, it’s still not how word2vec is actually trained. We’re missing a couple of key ideas.</p>
+
+<h1 id="negative-sampling">Negative Sampling</h1>
+
+<blockquote class="subtle">
+“To attempt an understanding of Muad'Dib without understanding his mortal enemies, the Harkonnens, is to attempt seeing Truth without knowing Falsehood. It is the attempt to see the Light without knowing Darkness. It cannot be.” ~Dune
+</blockquote>
+
+<p>Recall the three steps of how this neural language model calculates its prediction:
+<br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/language-model-expensive.png">
+  <br>  
+</div>
+
+<p><br></p>
+
+<p>The third step is very expensive from a computational point of view – especially knowing that we will do it once for every training sample in our dataset (easily tens of millions of times). We need to do something to improve performance.</p>
+
+<p>One way is to split our target into two steps:</p>
+
+<ol>
+  <li>Generate high-quality word embeddings (Don’t worry about next-word prediction).</li>
+  <li>Use these high-quality embeddings to train a language model (to do next-word prediction).</li>
+</ol>
+
+<p>We’ll focus on step 1. in this post as we’re focusing on embeddings. To generate high-quality embeddings using a high-performance model, we can switch the model’s task from predicting a neighboring word:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/predict-neighboring-word.png">
+  <br>  
+</div>
+
+<p>And switch it to a model that takes the input and output word, and outputs a score indicating if they’re neighbors or not (0 for “not neighbors”, 1 for “neighbors”).</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/are-the-words-neighbors.png">
+  <br>  
+</div>
+
+<p>This simple switch changes the model we need from a neural network, to a logistic regression model – thus it becomes much simpler and much faster to calculate.</p>
+
+<p>This switch requires we switch the structure of our dataset – the label is now a new column with values 0 or 1. They will be all 1 since all the words we added are neighbors.</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-training-dataset.png">
+  <br>  
+</div>
+
+<p><br></p>
+
+<p>This can now be computed at blazing speed – processing millions of examples in minutes. But there’s one loophole we need to close. If all of our examples are positive (target: 1), we open ourself to the possibility of a smartass model that always returns 1 – achieving 100% accuracy, but learning nothing and generating garbage embeddings.</p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-smartass-model.png">
+  <br>  
+</div>
+
+<p>To address this, we need to introduce <em>negative samples</em> to our dataset – samples of words that are not neighbors.  Our model needs to return 0 for those samples. Now that’s a challenge that the model has to work hard to solve – but still at blazing fast speed.</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-negative-sampling.png">
+  <br>  
+  For each sample in our dataset, we add <strong>negative examples</strong>. Those have the same input word, and a 0 label.
+</div>
+
+<p>But what do we fill in as output words? We randomly sample words from our vocabulary</p>
+
+<p><br></p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-negative-sampling-2.png">
+  <br>  
+</div>
+
+<p>This idea is inspired by <a href="http://proceedings.mlr.press/v9/gutmann10a/gutmann10a.pdf">Noise-contrastive estimation</a> [pdf]. We are contrasting the actual signal (positive examples of neighboring words) with noise (randomly selected words that are not neighbors). This leads to a great tradeoff of computational and statistical efficiency.</p>
+
+<h1 id="skipgram-with-negative-sampling-sgns">Skipgram with Negative Sampling (SGNS)</h1>
+
+<p>We have now covered two of the central ideas in word2vec: as a pair, they’re called skipgram with negative sampling.</p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/skipgram-with-negative-sampling.png">
+  <br>  
+</div>
+
+<h1 id="word2vec-training-process">Word2vec Training Process</h1>
+
+<blockquote class="subtle">
+"The machine cannot anticipate every problem of importance to humans. It is the difference between serial bits and an unbroken continuum. We have the one; machines are confined to the other." ~God Emperor of Dune
+</blockquote>
+
+<p>Now that we’ve established the two central ideas of skipgram and negative sampling, we can proceed to look closer at the actual word2vec training process.</p>
+
+<p>Before the training process starts, we pre-process the text we’re training the model against. In this step, we determine the size of our vocabulary (we’ll call this <code class="plain_code mdc-text-amber-700">vocab_size</code>, think of it as, say, 10,000) and which words belong to it.</p>
+
+<p>At the start of the training phase, we create two matrices – an <code class="plain_code mdc-text-green-500">Embedding</code> matrix and a <code class="plain_code mdc-text-purple-500">Context</code> matrix. These two matrices have an embedding for each word in our vocabulary (So <code class="plain_code mdc-text-amber-700">vocab_size</code> is one of their dimensions). The second dimension is how long we want each embedding to be (<code class="plain_code mdc-text-amber-900">embedding_size</code> – 300 is a common value, but we’ve looked at an example of 50 earlier in this post).</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-embedding-context-matrix.png">
+  <br>  
+</div>
+
+<p>At the start of the training process, we initialize these matrices with random values. Then we start the training process. In each training step, we take one positive example and its associated negative examples. Let’s take our first group:</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-training-example.png">
+  <br>  
+</div>
+
+<p>Now we have four words: the input word <code class="plain_code mdc-text-green-500">not</code> and output/context words: <code class="plain_code mdc-text-purple-500">thou</code> (the actual neighbor), <code class="plain_code mdc-text-purple-500">aaron</code>, and <code class="plain_code mdc-text-purple-500">taco</code> (the negative examples). We proceed to look up their embeddings – for the input word, we look in the <code class="plain_code mdc-text-green-500">Embedding</code> matrix. For the context words, we look in the <code class="plain_code mdc-text-purple-500">Context</code> matrix (even though both matrices have an embedding for every word in our vocabulary).</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-lookup-embeddings.png">
+  <br>  
+</div>
+
+<p>Then, we take the dot product of the input embedding with each of the context embeddings. In each case, that would result in a number, that number indicates the similarity of the input and context embeddings</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-training-dot-product.png">
+  <br>  
+</div>
+
+<p>Now we need a way to turn these scores into something that looks like probabilities – we need them to all be positive and have values between zero and one. This is a great task for <a href="https://jalammar.github.io/feedforward-neural-networks-visual-interactive/#sigmoid-visualization">sigmoid</a>, the <a href="https://en.wikipedia.org/wiki/Logistic_function">logistic operation</a>.</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-training-dot-product-sigmoid.png">
+  <br>  
+</div>
+
+<p>And we can now treat the output of the sigmoid operations as the model’s output for these examples. You can see that <code class="plain_code mdc-text-purple-500">taco</code> has the highest score and <code class="plain_code mdc-text-purple-500">aaron</code> still has the lowest score both before and after the sigmoid operations.</p>
+
+<p>Now that the untrained model has made a prediction, and seeing as though we have an actual target label to compare against, let’s calculate how much error is in the model’s prediction. To do that, we just subtract the sigmoid scores from the target labels.</p>
+
+<div class="img-div-any-width">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-training-error.png">
+  <br>  
+  <code class="plain_code mdc-text-yellow-800">error</code> = <code class="plain_code mdc-text-pink-400">target</code> - <code class="plain_code mdc-text-grey-900">sigmoid_scores</code>
+</div>
+
+<p><br></p>
+
+<p>Here comes the “learning” part of “machine learning”. We can now use this error score to adjust the embeddings of <code class="plain_code mdc-text-green-500">not</code>, <code class="plain_code mdc-text-purple-500">thou</code>, <code class="plain_code mdc-text-purple-500">aaron</code>, and <code class="plain_code mdc-text-purple-500">taco</code> so that the next time we make this calculation, the result would be closer to the target scores.</p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-training-update.png">
+  <br>  
+</div>
+
+<p>This concludes the training step. We emerge from it with slightly better embeddings for the words involved in this step (<code class="plain_code mdc-text-green-500">not</code>, <code class="plain_code mdc-text-purple-500">thou</code>, <code class="plain_code mdc-text-purple-500">aaron</code>, and <code class="plain_code mdc-text-purple-500">taco</code>). We now proceed to our next step (the next positive sample and its associated negative samples) and do the same process again.</p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-training-example-2.png">
+  <br>  
+</div>
+
+<p>The embeddings continue to be improved while we cycle through our entire dataset for a number of times. We can then stop the training process, discard the <code class="plain_code mdc-text-purple-500">Context</code> matrix, and use the <code class="plain_code mdc-text-green-500">Embeddings</code> matrix as our pre-trained embeddings for the next task.</p>
+
+<h1 id="window-size-and-number-of-negative-samples">Window Size and Number of Negative Samples</h1>
+<p>Two key hyperparameters in the word2vec training process are the window size and the number of negative samples.</p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-window-size.png">
+  <br>  
+</div>
+
+<p>Different tasks are served better by different window sizes. One <a href="https://youtu.be/tAxrlAVw-Tk?t=648">heuristic</a> is that smaller window sizes (2-15) lead to embeddings where high similarity scores between two embeddings indicates that the words are <em>interchangeable</em> (notice that antonyms are often interchangable if we’re only looking at their surrounding words – e.g. <em>good</em> and <em>bad</em> often appear in similar contexts). Larger window sizes (15-50, or even more) lead to embeddings where similarity is more indicative of <em>relatedness</em> of the words. In practice, you’ll often have to provide <a href="https://youtu.be/ao52o9l6KGw?t=287">annotations</a> that guide the embedding process leading to a useful similarity sense for your task. The Gensim default window size is 5 (two words before and two words after the input word, in addition to the input word itself).</p>
+
+<div class="img-div">
+  <img src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/word2vec-negative-samples.png">
+  <br>  
+</div>
+
+<p>The number of negative samples is another factor of the training process. The original paper prescribes 5-20 as being a good number of negative samples. It also states that 2-5 seems to be enough when you have a large enough dataset. The Gensim default is 5 negative samples.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<blockquote class="subtle">
+“If it falls outside your yardsticks, then you are engaged with intelligence, not with automation”  ~God Emperor of Dune
+</blockquote>
+
+<p>I hope that you now have a sense for word embeddings and the word2vec algorithm. I also hope that now when you read a paper mentioning “skip gram with negative sampling” (SGNS) (like the recommendation system papers at the top), that you have a better sense for these concepts. As always, all feedback is appreciated <a href="https://twitter.com/JayAlammar">@JayAlammar</a>.</p>
+
+<h1 id="references--further-readings">References &amp; Further Readings</h1>
+<ul>
+  <li><a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf">Distributed Representations of Words and Phrases and their Compositionality</a> [pdf]</li>
+  <li><a href="https://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space</a> [pdf]</li>
+  <li><a href="http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf">A Neural Probabilistic Language Model</a> [pdf]</li>
+  <li><a href="https://web.stanford.edu/~jurafsky/slp3/">Speech and Language Processing</a> by Dan Jurafsky and James H. Martin is a leading resource for NLP. Word2vec is tackled in Chapter 6.</li>
+  <li><a href="https://www.amazon.com/Language-Processing-Synthesis-Lectures-Technologies/dp/1627052984">Neural Network Methods in Natural Language Processing</a> by <a href="https://twitter.com/yoavgo">Yoav Goldberg</a> is a great read for neural NLP topics.</li>
+  <li><a href="http://mccormickml.com/">Chris McCormick</a> has written some great blog posts about Word2vec. He also just released <a href="https://www.preview.nearist.ai/paid-ebook-and-tutorial">The Inner Workings of word2vec</a>, an E-book focused on the internals of word2vec.</li>
+  <li>Want to read the code? Here are two options:
+    <ul>
+      <li>Gensim’s <a href="https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/word2vec.py">python implementation</a> of word2vec</li>
+      <li>Mikolov’s original <a href="https://github.com/tmikolov/word2vec/blob/master/word2vec.c">implementation in C</a> – better yet, this <a href="https://github.com/chrisjmccormick/word2vec_commented/blob/master/word2vec.c">version with detailed comments</a> from Chris McCormick.</li>
+    </ul>
+  </li>
+  <li><a href="http://sro.sussex.ac.uk/id/eprint/61062/1/Batchkarov,%20Miroslav%20Manov.pdf">Evaluating distributional models of compositional semantics</a></li>
+  <li><a href="http://ruder.io/word-embeddings-1/index.html">On word embeddings</a>, <a href="http://ruder.io/word-embeddings-softmax/">part 2</a></li>
+  <li><a href="https://www.amazon.com/Dune-Frank-Herbert/dp/0441172717/">Dune</a></li>
+</ul>
+
+<p><br>
+<br>
+<br>
+<br></p>
+
+  </div>
+
+  <div class="date">
+    Written on March 27, 2019
+  </div>
+
+  
+</article>
+
+    </div>
+
+
+
+    <!-- Begin Mailchimp Signup Form -->
+    <link href="https://cdn-images.mailchimp.com/embedcode/classic-10_7.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+    	#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+    	/* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+    	   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+    </style>
+    <div id="mc_embed_signup">
+    <form action="https://github.us19.list-manage.com/subscribe/post?u=2a4ade7dafcdbbf2eb4aae3cf&amp;id=f1f8c03f13" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate="novalidate">
+        <div id="mc_embed_signup_scroll">
+    	<h2>Subscribe to get notified about upcoming posts by email</h2>
+    <div class="mc-field-group">
+    	<label for="mce-EMAIL">Email Address </label>
+    	<input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" aria-required="true">
+    </div>
+    	<div id="mce-responses" class="clear">
+    		<div class="response" id="mce-error-response" style="display:none"></div>
+    		<div class="response" id="mce-success-response" style="display:none"></div>
+    	</div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_2a4ade7dafcdbbf2eb4aae3cf_f1f8c03f13" tabindex="-1" value=""></div>
+        <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+        </div>
+    </form>
+    </div>
+    <script type="text/javascript" src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
+    <!--End mc_embed_signup-->
+
+<div style="padding: 10px 0 10px 3%; color: #555; font-size:85%">
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="./The Illustrated Word2vec – Jay Alammar – Visualizing machine learning one concept at a time._files/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+<br>
+Attribution example:
+<br>
+<i>Alammar, J (2018). The Illustrated Transformer [Blog post]. Retrieved from <a href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></i>
+
+<br><br>
+Note: If you translate any of the posts, let me know so I can link your translation to the original post. My email is in the <a href="https://jalammar.github.io/about">about page</a>.
+</div>
+
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/jalammar"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/jalammar"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/jayalammar"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-71956058-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/illustrated-word2vec/',
+		  'title': 'The Illustrated Word2vec'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
