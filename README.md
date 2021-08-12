@@ -30,14 +30,20 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 <!-- #region -->
 
-## Readings & Homework
+## Readings 
 
-[Readings & Homework](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
+[Readings](syllabus.pdf)
+
+
+## Homework
+
+[homework](/homework/)
 
 ## Slides
 
 https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01-intro2css.ipynb#/
 
+## Notebook
 
 <div><img src=/assets/nav_logo.svg width = 200px></div>
 
@@ -48,6 +54,8 @@ https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/maste
 ## Wikisurvey
 
 Join in our wikisurvey http://www.allourideas.org/css
+
+## Community
 
 <div><img src=https://user-images.githubusercontent.com/543384/126108987-92c541d0-4242-49f6-9423-549bc65582a9.png width = 200px></div>
 
