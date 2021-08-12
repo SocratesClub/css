@@ -52,6 +52,6 @@ Join in our wikisurvey http://www.allourideas.org/css
 ![image](https://user-images.githubusercontent.com/543384/126108987-92c541d0-4242-49f6-9423-549bc65582a9.png)
 
 
-<div><img src=/assets/khan_mov.gif width = 400px></div>
+<div><img src=/assets/khan_mov.gif width = 600px></div>
 
 <!-- #endregion -->
