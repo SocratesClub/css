@@ -30,14 +30,7 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 <!-- #region -->
 
-## Readings 
-
-[Readings](Syllabus.pdf)
-
-
-## Homework
-
-[homework](/homework/)
+[Syllabus](Syllabus.pdf)  [homework](/homework/)  [Notebook](/notebook/)
 
 ## Slides
 
