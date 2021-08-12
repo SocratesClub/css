@@ -36,7 +36,7 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 ## Slides
 
-https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01.intro2css.ipynb#/
+https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01-intro2css.ipynb#/
 
 
 <div><img src=/assets/nav_logo.svg width = 200px></div>
