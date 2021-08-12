@@ -41,6 +41,8 @@ Join in our wikisurvey http://www.allourideas.org/css
 
 <div><img src=https://user-images.githubusercontent.com/543384/126108987-92c541d0-4242-49f6-9423-549bc65582a9.png width = 200px></div>
 
+Welcome to join in our dicussion https://www.douban.com/group/webmining/
+
 <div><img src=/assets/khan_mov.gif width = 600px></div>
 
 <!-- #endregion -->
