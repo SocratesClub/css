@@ -13,4 +13,4 @@ https://socratesacademy.github.io/css/readings/Pandas.html
 https://socratesacademy.github.io/css/readings/Translation_with_a_Seq2Seq&Attention.html
 https://socratesacademy.github.io/css/readings/UnderstandingPyTorch.html
 https://socratesacademy.github.io/css/readings/gradient_descent.html
-https://socratesacademy.github.io/css/readings/Variants of Gradient Descent.html.mhtml
+https://socratesacademy.github.io/css/readings/Variants_of_Gradient_Descent.mhtml
