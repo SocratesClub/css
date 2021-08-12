@@ -38,8 +38,6 @@ https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/maste
 
 ## Notebook
 
-<div><img src=/assets/nav_logo.svg width = 200px></div>
-
 
 [View the Notebook through Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
 
