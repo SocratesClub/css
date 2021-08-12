@@ -51,6 +51,7 @@ Join in our wikisurvey http://www.allourideas.org/css
 
 [Read More about X Academy](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
 
-![ask](khan_mov.gif)
+
+<div><img src=/assets/khan_mov.gif width = 400px></div>
 
 <!-- #endregion -->
