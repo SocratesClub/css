@@ -1,4 +1,3 @@
-- https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/10-03-emotion_dict.ipynb
 - https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01-intro2css.ipynb
 - https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/02-01-observing-behaviors.ipynb
 - https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/03-01-asking-questions.ipynb
@@ -24,4 +23,5 @@
 - https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/09-word2vec.ipynb
 - https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/10-01-text-mining.ipynb
 - https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/10-02-sentiment-analysis-with-dict.ipynb
+- https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/10-03-emotion_dict.ipynb
 - https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/10-03-sentiment-classifier.ipynb
