@@ -42,7 +42,7 @@ https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/maste
 <div><img src=/assets/nav_logo.svg width = 200px></div>
 
 
-[Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
+[View the Notebook through Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
 
 
 ## Wikisurvey
