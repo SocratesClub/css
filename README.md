@@ -1,4 +1,4 @@
-# TechX 2021 计算社会科学暑期课程
+# 计算社会科学暑期课程
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SocratesAcademy/css/blob/master/notebook/01.content.ipynb)
 
