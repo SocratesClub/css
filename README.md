@@ -1,6 +1,6 @@
-# 计算社会科学暑期课程
+# 《计算社会科学》暑期课程
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SocratesAcademy/css/blob/master/notebook/01.content.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SocratesAcademy/css/blob/master/notebook/0-content.ipynb)
 
 ![](./assets/chengjun.png)
 
@@ -30,26 +30,17 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 <!-- #region -->
 
-## Readings & Homework
+[Syllabus](Syllabus.pdf)  | [Homework](/homework/)  |  [Notebook](/notebook/) | [Slides](https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01-intro2css.ipynb#/) | View the Notebook through [Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
 
-[Readings & Homework](https://shimo.im/docs/98CYHd9wH8gGGVVJ)
-
-## Slides
-
-https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01.intro2css.ipynb#/
-
-[Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
-
-<div><img src=/assets/nav_logo.svg width = 200px></div>
 
 ## Wikisurvey
 
 Join in our wikisurvey http://www.allourideas.org/css
 
-![ask](2021.jpg)
+## Community
 
-[Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
+Welcome to join in our dicussion https://www.douban.com/group/webmining/
 
-![image](https://user-images.githubusercontent.com/543384/126108987-92c541d0-4242-49f6-9423-549bc65582a9.png)
+<div><img src=/assets/khan_mov.gif width = 600px></div>
 
 <!-- #endregion -->
