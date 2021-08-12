@@ -46,10 +46,11 @@ https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/maste
 
 Join in our wikisurvey http://www.allourideas.org/css
 
-![ask](2021.jpg)
-
-[Read More about TechX](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
-
 ![image](https://user-images.githubusercontent.com/543384/126108987-92c541d0-4242-49f6-9423-549bc65582a9.png)
+
+
+[Read More about X Academy](https://mp.weixin.qq.com/s/vI2A2Br9qRZYGjkgkng0GA)
+
+![ask](khan_mov.gif)
 
 <!-- #endregion -->
