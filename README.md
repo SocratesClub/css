@@ -30,7 +30,7 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 <!-- #region -->
 
-[Syllabus](Syllabus.pdf)  | [Homework](/homework/)  |  [Notebook](/notebook/) | [Slides](https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01-intro2css.ipynb#/) | [View the Notebook through Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
+[Syllabus](Syllabus.pdf)  | [Homework](/homework/)  |  [Notebook](/notebook/) | [Slides](https://nbviewer.jupyter.org/format/slides/github/SocratesAcademy/css/blob/master/notebook/01-intro2css.ipynb#/) | View the Notebook through [Jupyter nbviewer](https://nbviewer.jupyter.org/github/SocratesAcademy/css/tree/master/notebook/)
 
 
 ## Wikisurvey
