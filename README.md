@@ -32,7 +32,7 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 ## Readings 
 
-[Readings](syllabus.pdf)
+[Readings](Syllabus.pdf)
 
 
 ## Homework
