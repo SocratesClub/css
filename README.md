@@ -41,6 +41,6 @@ Join in our wikisurvey http://www.allourideas.org/css
 
 Welcome to join in our dicussion https://www.douban.com/group/webmining/
 
-<div><img src=/assets/khan_mov.gif width = 600px></div>
+<div><img src=https://github.com/SocratesAcademy/css/assets/khan_mov.gif width = 600px></div>
 
 <!-- #endregion -->
