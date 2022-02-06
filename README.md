@@ -43,4 +43,6 @@ Welcome to join in our dicussion https://www.douban.com/group/webmining/
 
 <div><img src=https://github.com/SocratesAcademy/css/assets/khan_mov.gif width = 600px></div>
 
+![team](/assets/khan_mov.gif)
+
 <!-- #endregion -->
