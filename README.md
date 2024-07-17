@@ -14,6 +14,9 @@ https://github.com/orgs/SocratesAcademy/teams/css-team
 
 ## Content
 
+![image](https://github.com/user-attachments/assets/86b3fcc2-eecb-44c7-b6dd-eb34497cf920)
+
+授课思路：[用钻石切割钻石](https://chengjun.github.io/zh/posts/2024/05/teaching-reflection/)
 
 | 日期     | 内容                                    | 时长   |
 | -------- | --------------------------------------- | ------ |
