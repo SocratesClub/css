@@ -1,5 +1,7 @@
 # 《计算社会科学》课程
 
+本课程旨在帮助学生掌握计算社会科学（尤其是计算传播学）的核心概念、理论框架与研究方法，熟悉数据采集、分析及建模技术，理解计算工具在社会现象研究中的应用逻辑。通过理论讲解与实践操作，培养学生运用计算方法解决社会科学问题的能力，为开展跨学科研究奠定基础。 
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SocratesAcademy/css/blob/master/notebook/0-content.ipynb)
 
 ![](./assets/chengjun.png)
